@@ -1,20 +1,16 @@
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
-#include "luisaCinderRenderer.h"
-
-// Workaround for LuisaCompute DSL macro expansion issues
-// Define _WITH_FMT as empty to prevent compilation errors in DSL headers
-#define _WITH_FMT
+#include "NewTypeRenderer.h"
 
 #include <luisa/luisa-compute.h>
-// #include <luisa/dsl/sugar.h>  // Disabled - DSL requires additional preprocessor setup
+#include <luisa/dsl/sugar.h>
 
 using namespace ci;
 using namespace ci::app;
 using namespace luisa;
 using namespace luisa::compute;
-using namespace luisa::gl_interop;
+using namespace newtype::gl_interop;
 
 class IntegrationCinderLuisaApp : public App {
 public:
@@ -26,25 +22,25 @@ public:
     void resize() override;
 
 private:
-    // LuisaCompute context and device
+/*    // LuisaCompute context and device
     Context* luisa_context = nullptr;
     Device luisa_device;
     Stream luisa_stream;
+    */
 
     // Renderer for LuisaCompute to Cinder integration
-    std::unique_ptr<LuisaCinderRenderer> renderer;
+    std::unique_ptr<NewTypeRenderer> renderer;
 
-    // Compute kernel for rendering
-    //luisa::compute::Kernel2D<Image<float>, float, luisa::uint2>  render_kernel;
+    // Compiled shader for rendering
+    Shader2D<Image<float>, float, luisa::uint2> render_shader;
+
     // Time-varying parameters for animation
     float time = 0.0f;
     int frame_count = 0;
 };
 
 // Simple shader: renders a colorful gradient pattern based on position and time
-// NOTE: Disabled - requires <luisa/dsl/sugar.h> which needs additional preprocessor setup
-/*
-void render_gradient(ImageFloat image, float time, luisa::uint2 resolution) {
+Kernel2D render_gradient = [](ImageFloat image, Float time, UInt2 resolution) {
     Var coord = dispatch_id().xy();
 
     // Normalize coordinates to [0, 1]
@@ -59,11 +55,11 @@ void render_gradient(ImageFloat image, float time, luisa::uint2 resolution) {
     auto wave = sin(uv.x * 10.0f + time) * sin(uv.y * 10.0f + time) * 0.2f;
 
     // Store to image (RGBA format, stored as float4)
-    image.write(coord, make_float4(r + wave, g + wave, b + wave, Var<float>(1.0f)));
-}
-*/
+    image.write(coord, make_float4(r + wave, g + wave, b + wave, 1.0f));
+};
 
 void IntegrationCinderLuisaApp::setup() {
+   /*
     // Get the full executable path for LuisaCompute Context
     char exePath[MAX_PATH];
     GetModuleFileNameA(NULL, exePath, MAX_PATH);
@@ -94,21 +90,16 @@ void IntegrationCinderLuisaApp::setup() {
         std::cerr << "Unknown exception creating CUDA device!" << std::endl;
         return;
     }
-
+    */
     // Create renderer (1280x720 default size)
-    renderer = std::make_unique<LuisaCinderRenderer>(
-        getWindowWidth(), getWindowHeight(), luisa_device);
+    renderer = std::make_unique<NewTypeRenderer>(
+        getWindowWidth(), getWindowHeight());
     renderer->initialize(TextureType::Float32);
 
-    // Create the compute kernel
-   /* auto render_kernel = luisa_device.compile_kernel2D(
-        render_gradient,
-        luisa_device.impl()->get_library_compiler(),
-        "render_gradient",
-        luisa_device.impl()->get_shader_compiler()
-    );*/
+    // Compile the compute kernel using DSL
+    render_shader = NewTypeRenderer::device().compile(render_gradient);
 
-    std::cout << "IntegrationCinderLuisaApp: Setup complete!" << std::endl;
+    std::cout << "IntegrationCinderLuisaApp: Setup complete with DSL kernel!" << std::endl;
 }
 
 void IntegrationCinderLuisaApp::update() {
@@ -120,22 +111,23 @@ void IntegrationCinderLuisaApp::draw() {
     gl::clear(Color(0.1f, 0.1f, 0.15f));
 
     // Begin frame - get render target
-    auto& frame = renderer->begin_frame(luisa_stream);
+    auto& frame = renderer->beginFrame();
 
     // Run compute kernel to render to LuisaCompute Image
     // Kernel renders a colorful animated gradient pattern
-    /*luisa_stream << render_kernel(frame.render_target, time,
-                                   make_uint2(renderer->width(), renderer->height()))
-                   << luisa_stream.synchronize();*/
+    NewTypeRenderer::stream() << render_shader(frame.render_target, time,
+                                  luisa::make_uint2(static_cast<uint>(renderer->width()),
+                                                    static_cast<uint>(renderer->height())))
+                        .dispatch(renderer->width(), renderer->height());
 
     // End frame - copy from LuisaCompute to Cinder GL texture
-    renderer->end_frame(luisa_stream);
+    renderer->endFrame();
 
     // Draw the rendered texture to screen
-    gl::draw(renderer->current_texture(), getWindowBounds());
+    gl::draw(renderer->currentTexture(), getWindowBounds());
 
     // Draw status text
-    gl::drawString("Cinder + LuisaCompute Integration - CUDA-OpenGL Interop",
+    gl::drawString("Cinder + LuisaCompute Integration - CUDA-OpenGL Interop with DSL",
                    vec2(10, 10), Color(1, 1, 1));
     gl::drawString("Frame: " + std::to_string(frame_count),
                    vec2(10, 30), Color(0.7f, 0.7f, 1.0f));
@@ -145,10 +137,10 @@ void IntegrationCinderLuisaApp::draw() {
 
 void IntegrationCinderLuisaApp::cleanup() {
     // renderer is automatically cleaned up by unique_ptr
-    if (luisa_context) {
+    /*if (luisa_context) {
         delete luisa_context;
         luisa_context = nullptr;
-    }
+    }*/
 }
 
 void IntegrationCinderLuisaApp::keyDown(KeyEvent event) {

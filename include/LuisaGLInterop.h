@@ -17,7 +17,7 @@
 #include <memory>
 #include <stdexcept>
 
-namespace luisa::gl_interop {
+namespace newtype::gl_interop {
 
 /**
  * @brief Exception class for CUDA-OpenGL interop errors
