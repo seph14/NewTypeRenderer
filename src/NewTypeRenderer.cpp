@@ -10,9 +10,10 @@
 namespace newtype::gl_interop {
 using namespace luisa;
 
-luisa::compute::Device   _device;
-luisa::compute::Context* _context = nullptr;
-luisa::compute::Stream   _stream;
+// Define static members
+luisa::compute::Device   NewTypeRenderer::_device;
+luisa::compute::Context* NewTypeRenderer::_context = nullptr;
+luisa::compute::Stream   NewTypeRenderer::_stream;
 
 NewTypeRenderer::NewTypeRenderer(uint32_t width, uint32_t height)
     : _width (width),

@@ -22,12 +22,6 @@ public:
     void resize() override;
 
 private:
-/*    // LuisaCompute context and device
-    Context* luisa_context = nullptr;
-    Device luisa_device;
-    Stream luisa_stream;
-    */
-
     // Renderer for LuisaCompute to Cinder integration
     std::unique_ptr<NewTypeRenderer> renderer;
 
@@ -59,38 +53,6 @@ Kernel2D render_gradient = [](ImageFloat image, Float time, UInt2 resolution) {
 };
 
 void IntegrationCinderLuisaApp::setup() {
-   /*
-    // Get the full executable path for LuisaCompute Context
-    char exePath[MAX_PATH];
-    GetModuleFileNameA(NULL, exePath, MAX_PATH);
-    std::cout << "Executable path: " << exePath << std::endl;
-
-    // Initialize LuisaCompute with full executable path
-    luisa_context = new (std::nothrow) Context(exePath);
-
-    if (!luisa_context) {
-        std::cerr << "Failed to create LuisaCompute Context!" << std::endl;
-        return;
-    }
-
-    // Try to create a device (CUDA backend preferred)
-    try {
-        luisa_device = luisa_context->create_device("cuda");
-        if (luisa_device) {
-            luisa_stream = luisa_device.create_stream();
-            std::cout << "LuisaCompute CUDA backend initialized successfully!" << std::endl;
-        } else {
-            std::cerr << "Failed to create CUDA device!" << std::endl;
-            return;
-        }
-    } catch (const std::exception& e) {
-        std::cerr << "Exception creating CUDA device: " << e.what() << std::endl;
-        return;
-    } catch (...) {
-        std::cerr << "Unknown exception creating CUDA device!" << std::endl;
-        return;
-    }
-    */
     // Create renderer (1280x720 default size)
     renderer = std::make_unique<NewTypeRenderer>(
         getWindowWidth(), getWindowHeight());
