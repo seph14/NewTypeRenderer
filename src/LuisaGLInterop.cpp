@@ -1,7 +1,7 @@
 #include "LuisaGLInterop.h"
 #include <iostream>
 
-namespace luisa::cinder {
+namespace luisa::gl_interop {
 
 LuisaGLInterop::LuisaGLInterop(const ci::gl::Texture2dRef& texture, unsigned int flags)
     : _textureId(texture->getId()),

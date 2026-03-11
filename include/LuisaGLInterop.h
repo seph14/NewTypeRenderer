@@ -17,7 +17,7 @@
 #include <memory>
 #include <stdexcept>
 
-namespace luisa::cinder {
+namespace luisa::gl_interop {
 
 /**
  * @brief Exception class for CUDA-OpenGL interop errors
@@ -262,4 +262,4 @@ public:
     }
 };
 
-} // namespace luisa::cinder
+} // namespace luisa::gl_interop

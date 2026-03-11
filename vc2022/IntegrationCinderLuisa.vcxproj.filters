@@ -21,12 +21,18 @@
     <ClCompile Include="..\src\LuisaGLInterop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\luisaCinderRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\LuisaGLInterop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\luisaCinderRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
