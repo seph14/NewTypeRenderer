@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Directory.Build.props Example
+
+  Copy this file to your solution root (e.g., D:\Projects\LuCompute\Directory.Build.props)
+  and update the paths below to match your environment.
+
+  MSBuild automatically loads Directory.Build.props for all projects in the directory tree.
+-->
+<Project>
+  <PropertyGroup>
+    <!-- ==========================================
+         Cinder Paths
+         Update CinderRoot to your Cinder installation
+         ========================================== -->
+    <CinderRoot>C:\Users\YourName\Projects\Cinder</CinderRoot>
+    <CinderInclude>$(CinderRoot)\include</CinderInclude>
+    <CinderIncludeAngle>$(CinderRoot)\include\ANGLE</CinderIncludeAngle>
+    <CinderLibDebug>$(CinderRoot)\lib\msw\x64\Debug_Shared\v143\</CinderLibDebug>
+    <CinderLibRelease>$(CinderRoot)\lib\msw\x64\Release_Shared\v143\</CinderLibRelease>
+    <CinderBinDebug>$(CinderRoot)\lib\msw\x64\Debug_Shared\v143</CinderBinDebug>
+    <CinderBinRelease>$(CinderRoot)\lib\msw\x64\Release_Shared\v143</CinderBinRelease>
+
+    <!-- ==========================================
+         LuisaCompute Paths
+         Update LuisaComputeRoot to your installation
+         ========================================== -->
+    <LuisaComputeRoot>D:\Projects\LuCompute\LuisaCompute</LuisaComputeRoot>
+    <LuisaComputeInclude>$(LuisaComputeRoot)\include</LuisaComputeInclude>
+    <LuisaComputeSpdlog>$(LuisaComputeRoot)\src\ext\spdlog\include</LuisaComputeSpdlog>
+    <LuisaComputeXxHash>$(LuisaComputeRoot)\src\ext\xxHash</LuisaComputeXxHash>
+    <LuisaComputeMagicEnum>$(LuisaComputeRoot)\src\ext\magic_enum\include</LuisaComputeMagicEnum>
+    <LuisaComputeEASTL>$(LuisaComputeRoot)\src\ext\EASTL\include</LuisaComputeEASTL>
+    <LuisaComputeEABase>$(LuisaComputeRoot)\src\ext\EASTL\packages\EABase\include\Common</LuisaComputeEABase>
+    <LuisaComputeReproc>$(LuisaComputeRoot)\src\ext\reproc\reproc\include</LuisaComputeReproc>
+    <LuisaComputeReprocXX>$(LuisaComputeRoot)\src\ext\reproc\reproc++\include</LuisaComputeReprocXX>
+    <LuisaComputeMarl>$(LuisaComputeRoot)\src\ext\marl\include</LuisaComputeMarl>
+    <LuisaComputeHalf>$(LuisaComputeRoot)\src\ext\half\include</LuisaComputeHalf>
+    <LuisaComputeStb>$(LuisaComputeRoot)\src\ext\stb</LuisaComputeStb>
+    <LuisaComputeLibDebug>$(LuisaComputeRoot)\build-cuda\lib\Debug\</LuisaComputeLibDebug>
+    <LuisaComputeLibRelease>$(LuisaComputeRoot)\build-cuda\lib\Release\</LuisaComputeLibRelease>
+    <LuisaComputeBinDebug>$(LuisaComputeRoot)\build-cuda\bin\Debug</LuisaComputeBinDebug>
+    <LuisaComputeBinRelease>$(LuisaComputeRoot)\build-cuda\bin\Release</LuisaComputeBinRelease>
+
+    <!-- ==========================================
+         CUDA Paths
+         Update CudaRoot to your CUDA toolkit version
+         ========================================== -->
+    <CudaRoot>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.1</CudaRoot>
+    <CudaInclude>$(CudaRoot)\include</CudaInclude>
+    <CudaLib>$(CudaRoot)\lib\x64\cuda.lib;$(CudaRoot)\lib\x64\cudart.lib</CudaLib>
+    <CudaBin>$(CudaRoot)\bin</CudaBin>
+
+    <!-- ==========================================
+         Platform Toolset
+         v143 = Visual Studio 2022
+         v142 = Visual Studio 2019
+         ========================================== -->
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+</Project>
